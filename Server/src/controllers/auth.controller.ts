@@ -27,14 +27,14 @@ export const registerController = async (req: Request, res: Response) => {
   }
 };
 
-export const loginController = async(req:Request,res:Response)=>{
-try {
+export const loginController = async (req: Request, res: Response) => {
+  try {
     const body = loginSchema.parse(req.body);
-    const result = await loginService(body);
+    const { user, accessToken, expiresAt, reportSetting } = await loginService(body);
 
     return res.status(200).json({
       message: "User logged in successfully",
-      data: result,
+      user, accessToken, expiresAt, reportSetting
     });
   } catch (error) {
     if (error instanceof Error) {
