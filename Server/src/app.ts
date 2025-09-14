@@ -1,21 +1,38 @@
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 import { globalError } from "./middlewares/errorHandler";
+import authRoute from "./routes/auth.route";
+import { _Config } from "./config/config";
 
 
 const app = express();
 app.use(express.json())
 
-// Routes
+// welcome-Routes
 app.get("/", (req: Request, res: Response) => {
-  return res.status(200).json({
-    message: "Welcome To Budget-Ai-Backend 🚀",
-    success: true,
-    status: 200,
-    timestamp: new Date().toISOString(),
-  });
+  try {
+    return res.status(200).json({
+      message: "Welcome To Budget-Ai-Backend 🚀",
+      success: true,
+      status: 200,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("Error in root route:", error);
+    return res.status(500).json({
+      message: "Server is down, please come later",
+      success: false,
+      status: 500,
+      timestamp: new Date().toISOString(),
+    });
+  }
 });
 
+
+
+//auth-route
+
+app.use(`${_Config.BASE_PATH}/auth`,authRoute)
 
 
 // Example: handle 404 (route not found)
